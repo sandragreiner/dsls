@@ -22,8 +22,8 @@ title: DSL Ecosystem Maturity Catalog
 email: sandra.greiner@unibe.ch
 description: >- # this means to ignore newlines until "baseurl:"
   Contribute your DSL for evaluation by filling the example data and creating a pull request.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://sandragreiner.github.io/dsls" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://sandragreiner.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/dsls" # the subpath of your site, e.g. /blog
 github_username:  sandragreiner
 
 # Build settings
