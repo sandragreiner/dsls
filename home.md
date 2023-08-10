@@ -1,6 +1,6 @@
 ---
 layout: page
-title:  "Overview New"
+title:  "Overview"
 categories: overview
 author: Sandra
 datatable: true
@@ -13,29 +13,28 @@ This table shows the information about all DSL's currently in the catalog:
 
 
 <html>
-<!-- js, html author: jabier.martinez -->
+<!-- js, html author: sandragreiner, jabier.martinez (partly) -->
 <head>
 <meta charset='UTF-8'>
 <link rel="stylesheet" type="text/css"
 	href="https://cdn.datatables.net/v/dt/jq-2.2.4/dt-1.10.15/datatables.min.css" />
 
 <link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/fixedheader/3.1.2/css/fixedHeader.dataTables.min.css" />
+	href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css" />
+	
 	
 <link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+	href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
 		<link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/buttons/1.4.1/css/buttons.dataTables.min.css" />
+	href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
 	
-<!--link rel="stylesheet" type="text/css" href="assets/css/datatable"-->
-
 <style type="text/css">
 .dataTables_filter, .dataTables_info { display: none;}
 tfoot {
 	display: table-header-group;
 }
 input {
-	width: 100px
+	width: 80px
 }
 .dataTables_wrapper.dt-buttons {
   float:none;  
@@ -43,24 +42,27 @@ input {
 }
 </style>
 
+
+<!-- Enables Sorting and Filtering -->
 <script type="text/javascript"
 	src="https://cdn.datatables.net/v/dt/jq-2.2.4/dt-1.10.15/datatables.min.js">
 </script>
-
-<!-- Fixed header -->
+<!-- Export button -->
 <script type="text/javascript"
-	src="https://cdn.datatables.net/fixedheader/3.1.2/js/dataTables.fixedHeader.min.js"></script>
-<!-- Export buttons -->
-<script type="text/javascript"
-	src="https://cdn.datatables.net/buttons/1.4.1/js/dataTables.buttons.min.js">
+	src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js">
 </script>
 <script type="text/javascript"
-	src="https://cdn.datatables.net/buttons/1.4.1/js/buttons.flash.min.js"></script>
+	src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<!-- Fixed header -->
 <script type="text/javascript"
-	src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+	src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
+	
+<!-- Enable dynamic adjustment of romes -->
+<script type="text/javascript"
+	src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js">
+</script>
 
-<script type="text/javascript"
-	src="https://cdn.datatables.net/buttons/1.4.1/js/buttons.html5.min.js"></script>
+
 	
 <script type="text/javascript" class="init">
 
@@ -94,14 +96,18 @@ input {
  		}
 
 		var table = $('#grid').DataTable({
-			// this allow to have two headers where the second one is used to filter and the first one to sort
-			bSortCellsTop: true,
-			// no pagination
+			// table entrys may be split among several pages
 			paging : true,
-			// freeze the header rows
+			// allows for having two headers, first one for sorting, second one for filtering
+			bSortCellsTop: true,
+			// header rows are fixed
 		    fixedHeader: true,
-		    // export buttons
+			scrollCollapse: true,
+			scrollX: 3500,
+			scrollY : true,
+		    // allow for having an export button
 	        dom: 'Bfrtip',
+			responsive: false,
 	        buttons: [
 	        	{
 	                extend: 'csv',
@@ -114,10 +120,10 @@ input {
 		});
 
 		$.each($('.input-filter', table.table().header()), function () {
-	        var column = table.column($(this).index());
+	        var col = table.column($(this).index());
 	        $('input', this).on('keyup change', function () {
-	            if (column.search() !== this.value) {
-	                column.search(this.value).draw();
+	            if (col.search() !== this.value) {
+	                col.search(this.value).draw();
 	            }
 	        });
 		});
@@ -131,8 +137,7 @@ input {
 		<b>Current number of included case studies:</b> <i id="insertCount"></i><br/>
 	</div>
 
-	<table id="grid" class="display" width="300%" cellspacing="0">
-
+	<table id="grid" class="display" width="300%" cellspacing="20">
 	
 	<thead>
 	{% for row in site.data.overview %}
@@ -159,12 +164,9 @@ input {
 		{% for pair in row %}
 		<th style="background-color: LightGray;">
 			
-			<!-- {% if isURL(pair[1]); %}
-			<a href="{{pair[1]}}"> {{pair[1]}}</a>
-			{% endif %} -->
 
 			<!-- condition doesn't work so far -->
-			{% if x.indexOf('http') >= 0 %}
+			{% if {%row().index()%} == 2   %}
 			<a href="{{pair[1]}}"> {{pair[1]}}</a>
 			{% else %}
 			{{pair[1]}}
